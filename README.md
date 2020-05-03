@@ -1,2 +1,2 @@
 # militer
-MILITER`s libs
+composer militer/militer
