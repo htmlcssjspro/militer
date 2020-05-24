@@ -2,7 +2,8 @@ vendor
 node_modules
 
 config/config.php
-database/keys.php
+config/dbConfig.php
+log/errors.log
 
 .vscode
 *.code-workspace
