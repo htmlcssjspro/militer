@@ -1,64 +1,32 @@
 <?php
 
+use Militer\mvcCore\App;
+use Militer\mvcCore\Exception\UserException;
+
 define('MILITER_START', microtime(true));
 
 // session_start();
-
-require realpath(__DIR__ . '/../vendor/autoload.php');
-require realpath(__DIR__ . '/../bootstrap/bootstrap.php');
-require realpath(__DIR__ . '/../bootstrap/dev.php');
+// $_SESSION['count'] = isset($_SESSION['count']) ? (++$_SESSION['count']) : 0;
 
 
-use Militer\mvcCore\Router\Router;
-use Militer\mvcCore\App;
+require dirname(__DIR__) . '/bootstrap/bootstrap.php';
 
-$container = require realpath(_ROOT_ . '/bootstrap/container.php');
+require _ROOT_ . '/vendor/autoload.php';
 
-require realpath(_ROOT_ . '/App/routes.php');
+UserException::init();
 
-$router = $container->get('Router');
+require _ROOT_ . '/config/container.php';
 
-// $router = new Router();
+require _ROOT_ . '/config/routes.php';
+
+App::start();
 
 
 
 
 
 
-// $config = require realpath(__DIR__ . '/../config/config.php');
-// $container->setDependency('config', $config);
-
-
-
-
-
-// $app = new App();
-
-
-
-// Router::getRoutesGET(); // test
-// Router::dispatch($request); // test
-
-
-
-// if (Router::matchRoute($request)) {
-//     Router::getRoute();
-// } else {
-//     echo '404';
-// }
-
-// // получить запрос
-// $request = new Request();
-// // обработать запрос
-
-// // сформировать ответ
-// $response = new Response($request);
-// // отправить ответ
-// $response->send();
-
-
-
-//
-require _ROOT_ . '/dev/test.php'; // Удалить в production.  // Для разработки самого фреймворка
-//
-echo '<br>Время выполнения скрипта: <strong>' . (microtime(true) - MILITER_START) . '</strong> секунд.';
+if (DEV) {
+    require _ROOT_ . '/dev/test.php';
+    echo '<br>Время выполнения скрипта: <strong>' . (microtime(true) - MILITER_START) . '</strong> секунд.';
+}

@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
-use Militer\mvcCore\Controller\Controller;
+use App\Models\HomeModel;
+use Militer\mvcCore\Controller;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function __construct(HomeModel $model)
     {
+        parent::__construct($model);
     }
 }

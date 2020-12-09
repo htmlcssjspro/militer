@@ -1,146 +1,352 @@
 'use strict';
-const {
-  src,
-  dest,
-  watch,
-  series,
-  parallel
-} = require('gulp');
 
+//* Gulp Main
+const {src, dest, watch, series, parallel} = require('gulp');
 
-const sassGlob = require('gulp-sass-glob');
-const sass = require('gulp-sass');
-sass.compiler = require('node-sass');
-const postcss = require('gulp-postcss');
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-const uglifyjs = require('gulp-uglify-es').default;
-const jsImport = require('gulp-js-import');
+//* Gulp Common
+const del = require('del');
+const gulpif     = require('gulp-if');
+const rename     = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
-const browserSync = require('browser-sync').create();
-const rename = require("gulp-rename");
-const clean = require('gulp-clean');
-const args = require('yargs').argv;
+const webp = require('gulp-webp');
+const webpConfig = {
+    preset      : 'default', // string: *default | photo | picture | drawing | icon | text
+    quality     : 75, // number: 0 - 100, *75
+    alphaQuality: 100, // number: 0 - 100, *100
+    method      : 4, // 0 (fastest) and 6 (slowest), *4
+    // size        : 100, // number: target size in bytes
+    sns         : 80, // number: 0 - 100, *80, Set the amplitude of spatial noise shaping
+    filter      : 0, // number: deblocking filter strength between 0 (off) and 100
+    autoFilter  : false, // boolean: Adjust filter strength automatically
+    sharpness   : 0, // number: *0, filter sharpness between 0 (sharpest) and 7 (least sharp)
+    lossless    : false, // boolean: *false, Encode images losslessly
+    nearLossless: 100, // number: 0-100, *100, Encode losslessly with an additional lossy pre-processing step, with a quality factor between 0 (maximum pre-processing) and 100 (same as lossless)
+    // crop        : {x: number, y: number, width: number, height: number},
+    // resize  : { width: number, height: number },
+    metadata    : 'none', // string | string[], *none | all | exif | icc | xmp
+    // buffer: // Buffer: Buffer to optimize
+};
 
+//* SCSS
+const autoprefixer = require('autoprefixer');
+const cssnano      = require('cssnano');
+const postcss      = require('gulp-postcss');
+const sass         = require('gulp-sass');
+sass.compiler      = require('node-sass');
+const sassGlob     = require('gulp-sass-glob');
+const gcmq         = require('gulp-group-css-media-queries');
+
+//* Webpack
+// const webpack       = require('webpack');
+// const webpackConfig = require('./webpack.config');
+// webpackConfig.mode  = 'production';
+// const webpackStream = require('webpack-stream');
+
+//* npm CommonJS
+// const args     = require('yargs').argv;
+const c        = require('ansi-colors');
+const path     = require('path');
+const through2 = require('through2');
+const {exec, execSync, spawn, spawnSync} = require('child_process');
+
+//* my CommonJS
+// const log = require('./node_libs/log/log');
+const log = require('D:/WebDevelopment/Projects/LIBS/node_libs/log/log');
+
+//* FTP (Gulp)
+const vinylFtp  = require('vinyl-ftp');
+const ftpConfig = require('./ftpConfig');
+const ftp       = vinylFtp.create({
+    host    : ftpConfig.host,
+    user    : ftpConfig.user,
+    password: ftpConfig.password,
+    parallel: 8,
+    reload  : true,
+    log     : log,
+});
+
+
+const config = {
+    DEV   : true,
+    useFTP: false,
+    ftp   : {
+        globs: [
+            'App/**/*.php',
+            'bootstrap/**/*.php',
+            'config/**/*.php',
+            'dev/**/*.php',
+            'public/**/*',
+            '.htaccess',
+            'composer.json'
+        ],
+        path: ftpConfig.path ? ftpConfig.path : '/'
+    },
+    js: {
+        globs       : './public/js/**/*',
+        remoteFolder: 'public/js'
+    },
+    css: {
+        src   : './src/css',
+        output: './public/css'
+    },
+    scss: {
+        src        : './src/scss',
+        output     : './public/css',
+        layout     : './src/scss/layout.scss',
+        main       : './src/scss/main.scss',
+        layoutAdmin: './src/scss/admin/layoutAdmin.scss',
+        admin      : './src/scss/admin/admin.scss',
+    },
+    img: {
+        globs: [
+            'src/img/**/*'
+        ],
+        src   : './src/img',
+        output: './public/img'
+    },
+    globs: [
+        '(App|Admin|bootstrap|config|dev)/**/*.php',
+        'src/scss/**/*.scss',
+        'src/css/**/*.css',
+        'src/js/**/*.js',
+        'public/*',
+        'D:/WebDevelopment/Projects/LIBS/**/(*.scss|*.js)',
+    ],
+    options: {
+        src: {
+            base  : '.',
+            buffer: false
+        },
+        dest   : {},
+        watcher: {
+            cwd   : '.',
+            events: ['add', 'change', 'unlink', 'ready'],
+        }
+    },
+};
 
 function watcher() {
+    const watcher = watch(config.globs, config.options.watcher);
+    watcher.on('change', filePath => dispatch(change, filePath));
+    watcher.on('add',    filePath => dispatch(add,    filePath));
+    watcher.on('unlink', filePath => dispatch(unlink, filePath));
 
-  browserSync.init({
-    proxy: 'http://htmlcssjspro.loc',
-    online: false
-  });
+    const imgWatcher = watch(config.img.globs, config.options.watcher);
+    imgWatcher.on('add', filePath => img(slash(filePath)));
+    // imgWatcher.on('unlink', filePath => imgDel(slash(filePath)));
 
-  watch([
-    'SRC/**/*.php',
-    'SRC/**/*.html',
-    'SRC/css/**/*.scss',
-    'SRC/js/*.js',
-    'SRC/admin/js/*.js',
-    'SRC/admin/db/*.json'
-  ]).on('change', path => {
-    console.log('path: ', path);
-    const srcPath = path.replace(/\\/g, '/');
-    console.log(`########## Изменен файл: ${srcPath} ##########`);
-    const destPath = srcPath.split('/').slice(1, -1).join('/');
-    const fileName = srcPath.split('/').slice(-1)[0].split('.').slice(0, -1).join('.');
-    const extension = srcPath.split('.').slice(-1)[0];
-    const fileNameMin = `${fileName}.min.${extension}`;
+    // const adminWatcher = watch(config.admin.globs, config.options.watcher);
+    // adminWatcher.on('change', filePath => setTimeout(() => admin(slash(filePath)), 200));
+}
 
-    switch (extension) {
-      case 'php':
-      case 'html':
-      case 'json':
-        return src(srcPath)
-          .pipe(dest(`SERVER/${destPath}`))
-          .pipe(browserSync.stream());
-      case 'js':
-        return src(srcPath)
-          .pipe(sourcemaps.init())
-          .pipe(jsImport())
-          .pipe(uglifyjs())
-          .pipe(rename(fileNameMin))
-          .pipe(sourcemaps.write('.'))
-          .pipe(dest(`SERVER/${destPath}`))
-          .pipe(browserSync.stream());
-      case 'scss':
-      case 'css':
-        return src('SRC/css/style.scss')
-          .pipe(sourcemaps.init())
-          .pipe(sassGlob())
-          .pipe(sass.sync().on('error', sass.logError))
-          .pipe(postcss([
-            autoprefixer(),
-            cssnano()
-          ]))
-          .pipe(rename('style.min.css'))
-          .pipe(sourcemaps.write('.'))
-          .pipe(dest(`SERVER/css`))
-          .pipe(browserSync.stream());
+function dispatch(func, filePath) {
+    filePath = slash(filePath);
+    setTimeout(() => func(filePath), 200);
+}
+
+function change(filePath) {
+    logFile('Изменен файл:', filePath);
+    const ext = path.extname(filePath);
+
+    switch (ext) {
+        case '.php':
+        case '.html':
+        case '.json':
+            php(filePath);
+            break;
+        case '.js':
+            webpack();
+            break;
+        case '.scss':
+            scssMain(filePath);
+            break;
+        case '.css':
+            css(filePath);
+            break;
     }
-  });
-
-
-  // admin
-  watch([
-    'SRC/admin/css/**/*.scss'
-  ]).on('change', path => {
-    const srcPath = path.replace(/\\/g, '/');
-    console.log(`########## Изменен файл: ${srcPath} ##########`);
-
-    return src('SRC/admin/css/admin.style.scss')
-      .pipe(sourcemaps.init())
-      .pipe(sassGlob())
-      .pipe(sass.sync().on('error', sass.logError))
-      .pipe(postcss([
-        autoprefixer(),
-        cssnano()
-      ]))
-      .pipe(rename('admin.style.min.css'))
-      .pipe(sourcemaps.write('.'))
-      .pipe(dest(`SERVER/admin/css`))
-      .pipe(browserSync.stream());
-  });
-
-
-  watch([
-    'SRC/img/**/*',
-    'SRC/css/fonts/**/*'
-  ]).on('add', path => {
-    console.log(`########## Добавлен файл: ${path} ##########`);
-    const srcPath = path.replace(/\\/g, '/');
-    const destPath = srcPath.split('/').slice(1, -1).join('/');
-    return src(srcPath)
-      .pipe(dest(`SERVER/${destPath}`))
-      .pipe(browserSync.stream());
-  });
-
-  watch('SRC/**/*').on('unlink', path => {
-    const filePath = path.split('\\').slice(1).join('/');
-    console.log(`########## Удален файл: SRC/${filePath} ##########`);
-    console.log(`########## Удален файл: SERVER/${filePath} ##########`);
-    return src(`SERVER/${filePath}`, {
-        read: false,
-        allowEmpty: true
-      })
-      .pipe(clean({
-        force: true
-      }));
-  });
 }
 
-function cleanPath() {
-  const path = args.path;
-  console.log(`########## Очищаю папку: ${path} ##########`);
-  return src([
-      `SRC/${path}`,
-      `SERVER/${path}`
-    ], {
-      read: false
-    })
-    .pipe(clean({
-      force: true
-    }));
+function php(filePath) {
+    if (config.useFTP) {
+        const {ftpDest} = getDest(filePath);
+        return src(filePath).pipe(ftp.dest(ftpDest));
+    }
 }
 
-exports.default = watcher;
-exports.clean = cleanPath;
+function webpack() {
+    exec('npx webpack', (error, stdout, stderr) => {
+        if (error) {
+            console.error(error);
+            return;
+        }
+        console.log(stdout);
+        if (stderr) {
+            console.error('stderr:', stderr);
+        }
+        if (config.useFTP) {
+            const remoteJsFolder = path.posix.join(config.ftp.path, config.js.remoteFolder);
+            return src(config.js.globs, config.options.src)
+                .pipe(ftp.newer(remoteJsFolder))
+                .pipe(ftp.dest(config.ftp.path));
+        }
+    });
+}
+
+
+function scssMain(filePath) {
+    const baseName = path.basename(filePath);
+    scss(filePath);
+    if (baseName !== path.basename(config.scss.layout) &&
+        baseName !== path.basename(config.scss.main) &&
+        baseName !== path.basename(config.scss.layoutAdmin) &&
+        baseName !== path.basename(config.scss.admin)) {
+        scss(config.scss.layout);
+        scss(config.scss.main);
+        scss(config.scss.layoutAdmin);
+        scss(config.scss.admin);
+    }
+}
+
+function scss(filePath) {
+    const {destPath, ftpDest} = getDest(filePath, config.scss.src, config.scss.output);
+    return src(filePath)
+        .pipe(gulpif(config.DEV, sourcemaps.init()))
+        .pipe(sassGlob())
+        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(gcmq())
+        .pipe(gulpif(config.DEV,
+            postcss([
+                autoprefixer(),
+            ]),
+            postcss([
+                autoprefixer(),
+                cssnano()
+            ]))
+        )
+        .pipe(gulpif(config.DEV, sourcemaps.write('.')))
+        .pipe(dest(destPath))
+        .pipe(gulpif(config.useFTP, ftp.dest(ftpDest)));
+}
+
+function css(filePath) {
+    const {destPath, ftpDest} = getDest(filePath, config.css.src, config.css.output);
+    return src(filePath)
+        .pipe(gulpif(config.DEV, sourcemaps.init()))
+        .pipe(gcmq())
+        .pipe(gulpif(config.DEV,
+            postcss([
+                autoprefixer(),
+            ]),
+            postcss([
+                autoprefixer(),
+                cssnano()
+            ]))
+        )
+        .pipe(gulpif(config.DEV, sourcemaps.write('.')))
+        .pipe(dest(destPath))
+        .pipe(gulpif(config.useFTP, ftp.dest(ftpDest)));
+}
+
+function img(filePath) {
+    const {destPath, ftpDest} = getDest(filePath, config.img.src, config.img.output);
+    logFile('Добавлен локальный файл изображения:', filePath);
+    return src(filePath)
+        // .pipe(webp(webpConfig))
+        .pipe(webp())
+        .pipe(dest(destPath))
+        .pipe(gulpif(config.useFTP, ftp.dest(ftpDest)));
+}
+
+// function imgDel(filePath) {
+//     logFile('Удален локальный файл изображения:', filePath);
+//     const file =
+//     async() => {
+//         const deleted = await del(file);
+//         logFile('Удален локальный файл изображения:', deleted);
+//     };
+// }
+
+
+
+
+function add(filePath) {
+    logFile('Добавлен локальный файл:', filePath);
+    if (config.useFTP) {
+        const remoteFile = path.posix.join(config.ftp.path, filePath);
+        return src(filePath)
+            .pipe(ftp.dest(path.dirname(remoteFile)))
+            .on('end', () => logFile('Добавлен файл на север:', remoteFile));
+    }
+}
+
+function unlink(filePath) {
+    logFile('Удален локальный файл:', filePath);
+    if (config.useFTP) {
+        const remoteFile = path.posix.join(config.ftp.path, filePath);
+        ftp.delete(remoteFile, () => logFile('Удален файл с сервера:', remoteFile));
+    }
+}
+
+function ftpRefresh() {
+    if (config.useFTP) {
+        return src(config.ftp.globs, config.options.src)
+            .pipe(ftp.newer(config.ftp.path))
+            .pipe(ftp.dest(config.ftp.path))
+            .pipe(ftp.clean(`${config.ftp.path}**/*`, '.', {base: config.ftp.path, buffer: false}));
+    }
+}
+
+
+
+//? Функция, которая может работать внутри .pipe(): .pipe(myFunction())
+function myFunction() {
+    return through2.obj(function(file, enc, cb) {
+        // Paths are resolved by gulp
+        const filepath = file.path;
+        console.log('filepath: ', filepath);
+        const cwd = file.cwd;
+        console.log('cwd: ', cwd);
+        const relative = path.relative(cwd, filepath);
+        console.log('relative: ', relative);
+
+        //* Do something
+
+        cb();
+    });
+}
+
+function checkStream() {
+    return through2.obj(function(file, enc, cb) {
+        // Paths are resolved by gulp
+        const filepath = file.path;
+        console.log('filepath: ', filepath);
+        const cwd = file.cwd;
+        console.log('cwd: ', cwd);
+        const relative = path.relative(cwd, filepath);
+        console.log('relative: ', relative);
+        cb();
+    });
+}
+
+//* Helpers
+
+function slash(filePath) {
+    return filePath.replace(/\\/g, '/');
+}
+
+function logFile(message, filePath) {
+    console.log(c.cyanBright('#'.repeat(80)));
+    log(c.greenBright(message), c.magentaBright(filePath));
+    console.log(c.cyanBright('#'.repeat(80)));
+}
+
+function getDest(filePath, src = '.', output = '.') {
+    const rel = path.relative(src, path.dirname(filePath));
+    const destPath = path.posix.join(output, rel);
+    const ftpDest = path.posix.join(config.ftp.path, destPath);
+    return {destPath: destPath, ftpDest: ftpDest};
+}
+
+
+exports.default    = watcher;
+exports.ftpRefresh = ftpRefresh;

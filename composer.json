@@ -1,17 +1,21 @@
 {
     "name": "militer/militer",
-    "description": "Движок веб-сайта с микро-mvc-фреймворком и микро-cms",
+    "description": "Движок веб-сайта на базе микро-mvc-фреймворка",
     "type": "project",
     "license": "GPL-3.0-or-later",
-    "authors": [{
-        "name": "Sergei MILITER Tarasov",
-        "email": "militer@htmlcssjs.pro",
-        "homepage": "https://htmlcssjs.pro",
-        "role": "Developer"
-    }],
+    "authors": [
+        {
+            "name": "Sergei MILITER Tarasov",
+            "email": "militer@htmlcssjs.pro",
+            "homepage": "https://htmlcssjs.pro",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "App\\": "App/"
+            "Api\\": "Api/",
+            "App\\": "App/",
+            "Admin\\": "Admin/"
         }
     },
     "autoload-dev": {
@@ -25,9 +29,7 @@
         "militer/cms-core": "*",
         "militer/mvc-core": "*"
     },
-    "require-dev": {
-        "militer/dev-core": "*"
-    },
+    "require-dev": {},
     "scripts": {
         "post-install": [
             "php -r \"copy('config/config-example.php', 'config/config.php');\"",

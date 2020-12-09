@@ -5,5 +5,10 @@ config/config.php
 config/dbConfig.php
 log/errors.log
 
+dev
+ftpConfig.js
+
+package-lock.json
+
 .vscode
 *.code-workspace
