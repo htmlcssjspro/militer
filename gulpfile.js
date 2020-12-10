@@ -65,10 +65,16 @@ const ftp       = vinylFtp.create({
     log     : log,
 });
 
+const DEV  = true;
+const PROD = !DEV;
+if (DEV) {
+    console.log('Mode: DEVELOPMENT');
+} else {
+    console.log('Mode: PRODUCTION');
+}
 
 const config = {
-    DEV   : true,
-    useFTP: false,
+    useFTP: true,
     ftp   : {
         globs: [
             'App/**/*.php',
@@ -76,6 +82,7 @@ const config = {
             'config/**/*.php',
             'dev/**/*.php',
             'public/**/*',
+            'vendor/**/*',
             '.htaccess',
             'composer.json'
         ],
@@ -90,12 +97,10 @@ const config = {
         output: './public/css'
     },
     scss: {
-        src        : './src/scss',
-        output     : './public/css',
-        layout     : './src/scss/layout.scss',
-        main       : './src/scss/main.scss',
-        layoutAdmin: './src/scss/admin/layoutAdmin.scss',
-        admin      : './src/scss/admin/admin.scss',
+        src   : './src/scss',
+        output: './public/css',
+        main  : './src/scss/main.scss',
+        admin : './src/scss/admin/admin.scss',
     },
     img: {
         globs: [
@@ -105,9 +110,9 @@ const config = {
         output: './public/img'
     },
     globs: [
-        '(App|Admin|bootstrap|config|dev)/**/*.php',
+        '(Api|App|bootstrap|config|vendor|dev)/**/*.php',
+        // 'App/Views/**/*.scss',
         'src/scss/**/*.scss',
-        'src/css/**/*.css',
         'src/js/**/*.js',
         'public/*',
         'D:/WebDevelopment/Projects/LIBS/**/(*.scss|*.js)',
@@ -128,7 +133,7 @@ const config = {
 function watcher() {
     const watcher = watch(config.globs, config.options.watcher);
     watcher.on('change', filePath => dispatch(change, filePath));
-    watcher.on('add',    filePath => dispatch(add,    filePath));
+    // watcher.on('add',    filePath => dispatch(add,    filePath));
     watcher.on('unlink', filePath => dispatch(unlink, filePath));
 
     const imgWatcher = watch(config.img.globs, config.options.watcher);
@@ -196,13 +201,9 @@ function webpack() {
 function scssMain(filePath) {
     const baseName = path.basename(filePath);
     scss(filePath);
-    if (baseName !== path.basename(config.scss.layout) &&
-        baseName !== path.basename(config.scss.main) &&
-        baseName !== path.basename(config.scss.layoutAdmin) &&
+    if (baseName !== path.basename(config.scss.main) &&
         baseName !== path.basename(config.scss.admin)) {
-        scss(config.scss.layout);
         scss(config.scss.main);
-        scss(config.scss.layoutAdmin);
         scss(config.scss.admin);
     }
 }
@@ -210,11 +211,10 @@ function scssMain(filePath) {
 function scss(filePath) {
     const {destPath, ftpDest} = getDest(filePath, config.scss.src, config.scss.output);
     return src(filePath)
-        .pipe(gulpif(config.DEV, sourcemaps.init()))
+        .pipe(gulpif(DEV, sourcemaps.init()))
         .pipe(sassGlob())
         .pipe(sass.sync().on('error', sass.logError))
-        .pipe(gcmq())
-        .pipe(gulpif(config.DEV,
+        .pipe(gulpif(DEV,
             postcss([
                 autoprefixer(),
             ]),
@@ -223,7 +223,8 @@ function scss(filePath) {
                 cssnano()
             ]))
         )
-        .pipe(gulpif(config.DEV, sourcemaps.write('.')))
+        .pipe(gulpif(DEV, sourcemaps.write('.')))
+        .pipe(gulpif(PROD, gcmq()))
         .pipe(dest(destPath))
         .pipe(gulpif(config.useFTP, ftp.dest(ftpDest)));
 }
@@ -231,9 +232,8 @@ function scss(filePath) {
 function css(filePath) {
     const {destPath, ftpDest} = getDest(filePath, config.css.src, config.css.output);
     return src(filePath)
-        .pipe(gulpif(config.DEV, sourcemaps.init()))
-        .pipe(gcmq())
-        .pipe(gulpif(config.DEV,
+        .pipe(gulpif(DEV, sourcemaps.init()))
+        .pipe(gulpif(DEV,
             postcss([
                 autoprefixer(),
             ]),
@@ -242,7 +242,8 @@ function css(filePath) {
                 cssnano()
             ]))
         )
-        .pipe(gulpif(config.DEV, sourcemaps.write('.')))
+        .pipe(gulpif(DEV, sourcemaps.write('.')))
+        .pipe(gulpif(PROD, gcmq()))
         .pipe(dest(destPath))
         .pipe(gulpif(config.useFTP, ftp.dest(ftpDest)));
 }

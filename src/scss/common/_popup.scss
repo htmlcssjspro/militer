@@ -1,0 +1,19 @@
+%popup {
+    & {
+        position: fixed;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        @extend %flex-c;
+    }
+
+    &__wrapper {
+        & {
+            width: 600px;
+            padding: 3rem;
+            background: $white;
+            @extend %rounded;
+        }
+    }
+}

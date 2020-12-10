@@ -1,0 +1,108 @@
+'use strict';
+
+import {popupHandler} from '/src/js/modules/Handler';
+
+function newFetch(url, init = {}, cb = () => {}) {
+    init.method = init.method ? init.method : 'POST';
+    fetch(url, init)
+        .then(response => {
+            const ContentTypeHeader = response.headers.get('Content-Type');
+            switch (ContentTypeHeader) {
+                case 'text/plain':
+                case 'text/plain;charset=UTF-8':
+                case 'text/plain; charset=UTF-8':
+                case 'text/html':
+                case 'text/html;charset=UTF-8':
+                case 'text/html; charset=UTF-8':
+                    return response.text();
+                case 'application/json':
+                    return response.json();
+
+                default:
+                    return response.text();
+            }
+        })
+        .then(response => {
+            cb(response);
+            const $response = document.querySelector('section.response');
+            const $responseP = $response.querySelector('p');
+            // Вариант1
+            $responseP.innerHTML =
+                response.success ? response.success.message
+                    : response.error ? response.error.message
+                        : response.message ? response.message : '';
+            $responseP.innerHTML && popupHandler($response);
+            // Вариант 2
+            // if (response.message) {
+            //     $responseP.innerHTML = response.message;
+            //     popupHandler($response);
+            // }
+            // Вариант 3
+            // $responseP.innerHTML = response.message;
+            // $responseP.innerHTML && popupHandler($response);
+            // Вариант 4
+            // if (response.message) {
+            //     const $response = document.querySelector('section.response');
+            //     const $responseP = $response.querySelector('p');
+            //     $responseP.innerHTML = response.message;
+            //     $responseP.innerHTML && popupHandler($response);
+            // }
+
+            response.mainReload && mainReload();
+            response.reload && reload();
+        })
+        .catch(error => console.error(error));
+}
+
+function fetchFormOld($form, cb = () => {}) {
+    const fetchInit = {
+        method: $form.method,
+        body  : new FormData($form)
+    };
+    newFetch($form.action, fetchInit, response => {
+        cb(response);
+        if (response.success) {
+            const $popup = $form.closest('.popup');
+            $popup && $popup.classList.add('dn');
+        }
+    });
+}
+function fetchForm($form) {
+    const fetchInit = {
+        method: $form.method,
+        body  : new FormData($form)
+    };
+    newFetch($form.action, fetchInit, response => {
+        if (response.success) {
+            const $popup = $form.closest('.popup');
+            $popup && $popup.classList.add('dn');
+        }
+    });
+}
+
+function fetchUrl(url, cb) {
+    newFetch(url, undefined, cb);
+}
+
+function mainLoad(url) {
+    fetchMainLoad(url, data => {
+        document.querySelector('title').textContent = data.title;
+        document.querySelector('meta[name=description]').content = data.description;
+    });
+}
+function mainReload() {
+    fetchMainLoad(window.location.href);
+}
+
+function fetchMainLoad(url, cb = () => {}) {
+    newFetch(url, undefined, data => {
+        document.getElementById('main').innerHTML = data.content;
+        cb(data);
+    });
+}
+
+function reload() {
+    window.location.reload();
+}
+
+export {newFetch, fetchUrl, fetchForm, mainLoad, mainReload, reload};

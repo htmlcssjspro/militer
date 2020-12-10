@@ -1,0 +1,8 @@
+.response {
+    @extend %popup;
+
+    &__wrapper {
+        @extend %popup__wrapper;
+        // width: 600px;
+    }
+}

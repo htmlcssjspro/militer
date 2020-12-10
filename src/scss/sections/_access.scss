@@ -1,0 +1,34 @@
+.popup {
+    @extend %popup;
+    &__wrapper {
+        @extend %popup__wrapper;
+        .login & {
+            width: 400px;
+        }
+        .access-restore & {
+            width: 400px;
+        }
+    }
+}
+.login {
+    // width: 400px;
+}
+
+.register {
+    // width: 600px;
+    span[data-required='required']::before {
+        content: '*';
+        // width: 1em;
+        // height: 1em;
+    }
+    form {
+        & > span,
+        p {
+            font-size: 1.4rem;
+        }
+    }
+}
+
+.access-restore {
+    // width: 400px;
+}
