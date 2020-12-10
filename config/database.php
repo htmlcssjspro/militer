@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'driver'      => 'mysql',
+    'driver'      => 'mysql', // jjj
     'host'        => 'localhost',
     'port'        => '3306',
     'name'        => 'u1036142_sptutru',
