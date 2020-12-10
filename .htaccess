@@ -5,7 +5,9 @@ RewriteEngine On
 RewriteBase /
 RewriteRule ^favicon.ico$ public/favicon.ico [NC,L]
 RewriteRule ^robots.txt$ public/robots.txt [NC,L]
+#RewriteRule ^robots.txt$ public/robots.php [NC,L]
 RewriteRule ^sitemap.xml$ public/sitemap.xml [NC,L]
+#RewriteRule ^sitemap.xml$ public/sitemap.php [NC,L]
 RewriteRule ^404$ public/404.php [L]
 RewriteRule ^410$ public/410.php [L]
 ErrorDocument 403 404

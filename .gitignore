@@ -2,10 +2,13 @@ vendor
 node_modules
 
 config/config.php
-config/dbConfig.php
+config/database.php
 log/errors.log
-
-dev
+public/css/**/*.css
+public/css/**/*.css.map
+public/js/**/*.js
+public/js/**/*.js.map
+public/fonts/**/*
 ftpConfig.js
 
 package-lock.json
