@@ -26,32 +26,24 @@
     </header>
 
     <div class="content">
-        <div class="content__wrapper">
-            <main id="main" class="main">
-                <?php require $model->mainContent; ?>
-            </main>
+        <aside id="aside" class="aside">
+            <?php require $model->aside; ?>
+        </aside>
 
-            <aside id="aside" class="aside">
-                <?php require $model->aside; ?>
-            </aside>
-        </div>
+        <main id="main" class="main">
+            <?php require $model->mainContent; ?>
+        </main>
     </div>
 
     <footer id="footer" class="footer">
         <?php require $model->footer; ?>
     </footer>
 
-
-    <?php if ($model->guest) {
-        require SECTION_ACCESS;
-    } ?>
-
     <section class="response dn">
         <div class="response__wrapper">
             <P></P>
         </div>
     </section>
-
 
     <?php if ($model->pageCSS) : ?>
         <?php foreach ($model->pageCSS as $pageCSS) : ?>

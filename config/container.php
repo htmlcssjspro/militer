@@ -1,10 +1,10 @@
 <?php
 
-use App\Csrf\Csrf;
-use Militer\mvcCore\Interfaces\iCsrf;
 use App\User\User;
 use Militer\mvcCore\Interfaces\iUser;
 use Militer\mvcCore\Controller;
+use Militer\mvcCore\Csrf;
+use Militer\mvcCore\Interfaces\iCsrf;
 use Militer\mvcCore\Interfaces\iController;
 use Militer\mvcCore\DB;
 use Militer\mvcCore\Interfaces\iDB;
