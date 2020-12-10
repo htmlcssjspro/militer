@@ -31,6 +31,7 @@
     "require-dev": {},
     "scripts": {
         "post-install": [
+            "php -r \"rename('ftpConfig.php.example', 'ftpConfig.php');\"",
             "php -r \"rename('config/config.php.example', 'config/config.php');\"",
             "php -r \"rename('config/database.php.example', 'config/database.php');\"",
             "php -r \"rename('log/errors.log.example', 'log/errors.log');\""

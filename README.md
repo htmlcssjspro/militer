@@ -11,7 +11,7 @@ throw new \Exeption($message [, $code]);
 throw new \ErrorExeption($message [, $code]);
 
 throw new (
-    BadFunctionCallException
+      BadFunctionCallException
     | BadMethodCallException
     | DomainException
     | InvalidArgumentException
