@@ -14,8 +14,7 @@
     "autoload": {
         "psr-4": {
             "Api\\": "Api/",
-            "App\\": "App/",
-            "Admin\\": "Admin/"
+            "App\\": "App/"
         }
     },
     "autoload-dev": {
@@ -24,16 +23,17 @@
             "Dev\\": "dev/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
-        "militer/cms-core": "*",
-        "militer/mvc-core": "*"
+        "militer/mvc-core": "*",
+        "ramsey/uuid": "*"
     },
     "require-dev": {},
     "scripts": {
         "post-install": [
-            "php -r \"copy('config/config-example.php', 'config/config.php');\"",
-            "php -r \"copy('log/errors-example.log', 'log/errors.log');\""
+            "php -r \"rename('config/config.php.example', 'config/config.php');\"",
+            "php -r \"rename('config/database.php.example', 'config/database.php');\"",
+            "php -r \"rename('log/errors.log.example', 'log/errors.log');\""
         ],
         "post-create-project-cmd": [
             "@post-install",

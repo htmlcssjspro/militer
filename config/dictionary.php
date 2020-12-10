@@ -4,7 +4,7 @@
 return [
 
     'user' => [
-        'username'      => 'Псевдоним',
+        'username'      => 'Никнейм',
         'name'          => 'Имя',
         'email'         => 'Эл.почта',
         'phone'         => 'Телефон',
@@ -12,19 +12,9 @@ return [
         'register_date' => 'Дата регистрации',
         'status'        => 'Статус',
         'statusDict'    => [
-            'user'        => 'Участник',
-            'organizator' => 'Организатор',
+            'user'        => 'Пользователь',
             'guest'       => 'Гость',
         ]
     ],
 
-    'offer' => [
-        'active'       => 'Активно',
-        'stop'         => 'Стоп',
-        'payment'      => 'Оплата',
-        'transit'      => 'В пути',
-        'delivered'    => 'Прибытие',
-        'refund'       => 'Возврат',
-        'completed'    => 'Завершено',
-    ],
 ];

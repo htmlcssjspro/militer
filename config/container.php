@@ -53,42 +53,11 @@ $definitions = [
     'messages' => function () {
         return require _ROOT_ . '/config/messages.php';
     },
-    'loginMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['login'];
-    },
-    'logoutMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['logout'];
-    },
-    'registerMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['register'];
-    },
-    'accessRestoreMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['accessRestore'];
-    },
-    'currencyMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['currency'];
-    },
-    'offersMessages' => function (Container $container) {
-        $messages = $container::get('messages');
-        return $messages['offers'];
-    },
 
     'dictionary' => function () {
         return require _ROOT_ . '/config/dictionary.php';
     },
-    'userDict' => function (Container $container) {
-        $dict = $container::get('dictionary');
-        return $dict['user'];
-    },
-    'offerDict' => function (Container $container) {
-        $dict = $container::get('dictionary');
-        return $dict['offer'];
-    },
+
 
 ];
 
