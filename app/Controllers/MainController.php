@@ -11,10 +11,10 @@ class MainController extends aPageController
     public $Model;
 
 
-    public function __construct(MainModel $model)
+    public function __construct(MainModel $Model)
     {
         parent::__construct();
-        $this->Model = $model;
+        $this->Model = $Model;
 
         if ($this->User->userUuid === \STATUS_GUEST) {
             $this->Model->userData['status'] = \STATUS_GUEST;
@@ -38,39 +38,17 @@ class MainController extends aPageController
         $this->Model->mainJS  = \MAIN_JS;
 
         $this->Model->headers[] = '';
-
-        $_SESSION['town'] = $_SESSION['town'] ?? 'Самара';
     }
+
 
     public function index()
     {
         $this->Model->mainContent = \MAIN_HOME;
         // $this->model->pageCSS[] = '/public/css/militerslider.css';
         // $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->Model->getCurrencyData();
-        $this->Model->getDeliveryCostData();
-        $this->Model->getOrganizatorsData();
         $this->pageTextId = \MAIN_HOME_ID;
         $this->render();
     }
-
-    public function tariffs()
-    {
-        $this->Model->mainContent = \MAIN_TARIFFS;
-        // $this->model->pageCSS[] = '/public/css/militerslider.css';
-        // $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->pageTextId = \MAIN_TARIFFS_ID;
-        $this->render();
-    }
-
-    // public function info()
-    // {
-    //     $this->Model->mainContent = \MAIN_INFO;
-    //     // $this->model->pageCSS[] = '/public/css/militerslider.css';
-    //     // $this->model->pageJS[]  = '/public/js/militerslider.js';
-    //     $this->pageTextId = \MAIN_INFO_ID;
-    //     $this->render();
-    // }
 
     public function user()
     {
@@ -78,57 +56,11 @@ class MainController extends aPageController
             $this->Model->mainContent = \MAIN_GUEST;
         } else {
             $this->Model->mainContent = \MAIN_USER;
-            if ($this->Model->organizator) {
-                $this->Model->getUserOffers();
-                $this->Model->getTownsList();
-                $this->Model->offerDict = Container::get('offerDict');
-            }
-            $this->Model->getUserOrders();
         }
-        //     $this->model->pageCSS[] = '/public/css/militerslider.css';
-        //     $this->model->pageJS[]  = '/public/js/militerslider.js';
+        // $this->model->pageCSS[] = '/public/css/militerslider.css';
+        // $this->model->pageJS[]  = '/public/js/militerslider.js';
         $this->pageTextId = \MAIN_USER_ID;
         $this->render();
     }
 
-    public function offers()
-    {
-        $this->Model->mainContent = \MAIN_OFFERS;
-        //     $this->model->pageCSS[] = '/public/css/militerslider.css';
-        //     $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->Model->getOffers();
-        $this->pageTextId = \MAIN_OFFERS_ID;
-        $this->render();
-    }
-
-    public function offer($uuid)
-    {
-        $this->Model->mainContent = \MAIN_OFFER;
-        //     $this->model->pageCSS[] = '/public/css/militerslider.css';
-        //     $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->Model->includes['ordersList'] = \INCLUDES_ORDERS_LIST;
-        $this->Model->getOffer($uuid);
-        $this->Model->offerDict = Container::get('offerDict');
-        $this->pageTextId = \MAIN_OFFER_ID;
-        $this->render();
-    }
-
-    public function vip()
-    {
-        $this->Model->mainContent = \MAIN_VIP_OFFERS;
-        //     $this->model->pageCSS[] = '/public/css/militerslider.css';
-        //     $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->Model->getVip();
-        $this->pageTextId = \MAIN_VIP_OFFERS_ID;
-        $this->render();
-    }
-
-    public function faq()
-    {
-        $this->Model->mainContent = \MAIN_FAQ;
-        // $this->model->pageCSS[] = '/public/css/militerslider.css';
-        // $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->pageTextId = \MAIN_FAQ_ID;
-        $this->render();
-    }
 }

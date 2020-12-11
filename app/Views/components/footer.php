@@ -6,9 +6,7 @@
 
 <div class="footer__bottom">
     <p>
-        Цитирование и копирование любых материалов сайта - строго со ссылкой на источник <a href="http://sp-tut.ru" class="link_inline">sp-tut.ru</a>
-        <br>
-        Все права защищены. &copy; 2010-2020
+        &copy; 2021
     </p>
 </div>
 

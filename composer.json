@@ -14,7 +14,8 @@
     "autoload": {
         "psr-4": {
             "Api\\": "Api/",
-            "App\\": "App/"
+            "App\\": "App/",
+            "Core\\": "Core/"
         }
     },
     "autoload-dev": {
