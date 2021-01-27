@@ -2,4 +2,51 @@
 
 return [
     'property' => 'value',
+    'main' => [
+        'layout' => VIEWS . '/layouts/layoutDefault.php',
+        'header' => VIEWS . '/components/header.php',
+        'footer' => VIEWS . '/components/footer.php',
+        'aside'  => VIEWS . '/components/aside.php',
+
+        'css' => '/public/css/main.css',
+        'js'  => '/public/js/main.js',
+
+        'pages' => [
+            'home'  => VIEWS . '/pages/homePage.php',
+            'page1' => VIEWS . '/pages/page1.php',
+            'page2' => VIEWS . '/pages/page2.php',
+            'page3' => VIEWS . '/pages/page3.php',
+            'page4' => VIEWS . '/pages/page4.php',
+            'page5' => VIEWS . '/pages/page5.php',
+            'user'  => VIEWS . '/pages/user.php',
+        ],
+    ],
+    'admin' => [
+        'layout' => VIEWS . '/admin/layouts/AdminLayout.php',
+        'login'  => VIEWS . '/admin/layouts/login.php',
+        'header' => VIEWS . '/admin/components/header.php',
+        'footer' => VIEWS . '/admin/components/footer.php',
+        'aside'  => VIEWS . '/admin/components/aside.php',
+
+        'css' => '/public/css/admin/admin.css',
+        'js'  => '/public/js/admin.js',
+
+        'pages' => [
+            'home'        => VIEWS . '/admin/pages/homePage.php',
+            'pages'       => VIEWS . '/admin/pages/pages.php',
+            'usersList'   => VIEWS . '/admin/pages/usersList.php',
+            'preferences' => VIEWS . '/admin/pages/preferences.php',
+        ],
+    ],
+    'includes' => [
+        'userProfile' => VIEWS . '/includes/userProfile.php',
+    ],
+    'sections' => [
+        'access' => VIEWS . '/sections/access.php',
+    ],
+    'dbTables' => [
+        'sitemap' => 'sitemap',
+        'users'   => 'users',
+        'admin'   => 'admin',
+    ],
 ];

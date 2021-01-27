@@ -1,10 +1,10 @@
 'use strict';
 
-import {formHandler, btnHandler, dropdownHandler} from '/src/js/modules/Handler';
+import {formHandler, clickHandler, dropdownHandler} from '/src/js/modules/Handler';
 import {newFetch, fetchUrl, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
 
 
-btnHandler();
+clickHandler();
 formHandler();
 dropdownHandler();
 

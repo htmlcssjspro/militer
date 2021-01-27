@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\ApiModel;
-use Militer\mvcCore\Controller\aApiController;
-use Militer\mvcCore\DI\Container;
+use Core\Controller\aApiController;
+use Core\DI\Container;
 use Ramsey\Uuid\Uuid;
 
 class ApiController extends aApiController
@@ -81,78 +81,6 @@ class ApiController extends aApiController
             }
         });
     }
-
-    public function newOffer()
-    {
-        $this->csrfVerify(function ($newOfferData) {
-            $newOfferData['offer_uuid'] = $newOfferUuid = Uuid::uuid4();
-            $dest = \UPLOADS . "/img/offers/$newOfferUuid";
-            $newOfferData['img'] = $this->fileUpload('img', $dest, function ($file) {
-                // check $file
-            });
-            $messages = 'offers';
-            $result = $this->Model->setNewOffer($newOfferData);
-            $this->sendMessage($messages, $result);
-        });
-    }
-
-    public function newOrder()
-    {
-        $this->csrfVerify(function ($newOrderData) {
-            $newOrderData['order_uuid'] = Uuid::uuid4();
-            foreach ($newOrderData['name'] as $key => $name) {
-                $newOrderData['position_uuid'][$key] = $positionUuid = Uuid::uuid4();
-                $dest[$key] = \UPLOADS . "/img/orders/$positionUuid";
-            }
-            $newOrderData['img'] = $this->fileUpload('img', $dest, function ($file) {
-                // $file['tmp_name'];
-                // $file['name'];
-                // $file['type'];
-                // $file['size'];
-                // $file['error'];
-
-                //! Проверить формат файла
-                if ($file['type'] === 'image/jpeg') {
-                }
-                //! Проверить размер файла
-                if ($file['size'] > 5000000) {
-                }
-            });
-
-            \prd($newOrderData, '$newOrderData');
-
-            $messages = 'orders';
-            $result = $this->Model->setNewOrder($newOrderData);
-            if ($result) {
-                $this->countOfferFill($newOrderData);
-            }
-            $this->sendMessage($messages, $result);
-        });
-    }
-
-    private function countOfferFill($newOrderData)
-    {
-        $offerUuid = $newOrderData['offer_uuid'];
-        $offerFill = $newOrderData['offer-fill'];
-        $offerMin  = $newOrderData['offer-min'];
-        $price     = $newOrderData['price'];
-        $sum = $offerFill * $offerMin / 100;
-        $newSum = $sum + $price;
-        $newOfferFill = $newSum / $offerMin * 100;
-        $result = $this->Model->updateOfferFill($newOfferFill, $offerUuid);
-        if (!$result) {
-            throw new \Exception('Ошибка обновления $offerFill');
-        }
-    }
-
-
-    public function setTown()
-    {
-        $postData = $this->Request->getPOST();
-        $this->filterInput($postData);
-        $_SESSION['town'] = $postData['town'];
-    }
-
 
 
 

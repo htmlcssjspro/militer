@@ -11,13 +11,15 @@ class Router implements iRouter
     private $Request;
     private $Response;
     private $PDO;
+    private $config;
 
 
-    public function __construct(iRequest $request, iResponse $response)
+    public function __construct(iRequest $Request, iResponse $Response)
     {
-        $this->Request  = $request;
-        $this->Response = $response;
+        $this->Request  = $Request;
+        $this->Response = $Response;
         $this->PDO = Container::get('pdo');
+        $this->config = Container::get('config');
 
         $this->dispatch();
     }
@@ -25,12 +27,11 @@ class Router implements iRouter
 
     private function dispatch()
     {
-        $method     = $this->Request->getMethod();
         $requestUri = $this->Request->getRequestUri();
-        $sitemap_table = \SITEMAP_TABLE;
-        $sql = "SELECT `controller`, `action` FROM $sitemap_table WHERE `method`=:method AND `page_url`=:page_url LIMIT 1";
+        $sitemap_table = $this->config['dbTables']['sitemap'];
+        $sql = "SELECT `controller`, `action` FROM $sitemap_table WHERE `page_url`=? LIMIT 1";
         $pdostmt = $this->PDO->prepare($sql);
-        $pdostmt->execute([':method' => $method, ':page_url' => $requestUri]);
+        $pdostmt->execute([$requestUri]);
         $page = $pdostmt->fetch();
 
         if (!$page) {
@@ -41,7 +42,8 @@ class Router implements iRouter
         $action     = $page['action'] ?? 'index';
 
         $controller = Container::get("App\Controllers\\$controller");
-        $controller->$action();
+        $query = $this->Request->getQuery();
+        $query ? $controller->$action($query) : $controller->$action();
     }
 
 }

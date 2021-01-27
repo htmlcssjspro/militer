@@ -7,12 +7,15 @@ use Core\DI\Container;
 abstract class aUser implements iUser
 {
     protected $PDO;
-    protected $usersTable = \USERS_TABLE;
+    protected $usersTable;
+    private $config;
 
 
     public function __construct()
     {
         $this->PDO = Container::get('pdo');
+        $this->config = Container::get('config');
+        $this->usersTable = $this->config['dbTables']['users'];
     }
 
 

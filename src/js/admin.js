@@ -1,10 +1,10 @@
 'use strict';
 
 import {newFetch, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
-import {formHandler, btnHandler, dropdownHandler, popupHandler} from '/src/js/modules/Handler';
+import {formHandler, clickHandler, dropdownHandler, popupHandler} from '/src/js/modules/Handler';
 
 
-btnHandler({
+clickHandler({
     del(t) {
         const $label = t.closest('label');
         const $input = $label.querySelector('input[name="newname[]"]');

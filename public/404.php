@@ -23,7 +23,7 @@
       flex-direction: column;
       width: 100%;
       height: 100vh;
-      background: url(/public/img/404_bg.jpg) 70%/cover no-repeat #050607;
+      background: url(/public/img/404/404_bg.jpg) 70%/cover no-repeat #050607;
       box-sizing: border-box;
     }
 
@@ -31,7 +31,7 @@
       width: 80%;
       max-width: 640px;
       height: 80%;
-      background: url(/public/img/404_text.png) center/contain no-repeat;
+      background: url(/public/img/404/404_text.png) center/contain no-repeat;
     }
 
     .errorPageText {
@@ -48,7 +48,7 @@
   </style>
   <div class="errorPageBox">
     <div class="errorPageImage"></div>
-    <div class="errorPageText">Вы можете зайти на <a href="/">главную</a>.</a></div>
+    <div class="errorPageText">Вы можете зайти на <a href="/">Главную</a>.</a></div>
   </div>
 </body>
 

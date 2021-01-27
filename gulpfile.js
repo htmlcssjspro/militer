@@ -49,9 +49,6 @@ const path     = require('path');
 const through2 = require('through2');
 const {exec, execSync, spawn, spawnSync} = require('child_process');
 
-//* my CommonJS
-// const log = require('./node_libs/log/log');
-const log = require('D:/WebDevelopment/Projects/LIBS/node_libs/log/log');
 
 //* FTP (Gulp)
 const vinylFtp  = require('vinyl-ftp');
@@ -78,11 +75,10 @@ const config = {
     ftp   : {
         globs: [
             'App/**/*.php',
-            'bootstrap/**/*.php',
             'config/**/*.php',
+            'Core/**/*.php',
             'dev/**/*.php',
             'public/**/*',
-            'vendor/**/*',
             '.htaccess',
             'composer.json'
         ],
@@ -110,8 +106,7 @@ const config = {
         output: './public/img'
     },
     globs: [
-        '(Api|App|bootstrap|config|vendor|dev)/**/*.php',
-        // 'App/Views/**/*.scss',
+        '(App|config|Core|dev)/**/*.php',
         'src/scss/**/*.scss',
         'src/js/**/*.js',
         'public/*',
@@ -293,9 +288,17 @@ function ftpRefresh() {
         return src(config.ftp.globs, config.options.src)
             .pipe(ftp.newer(config.ftp.path))
             .pipe(ftp.dest(config.ftp.path))
-            .pipe(ftp.clean(`${config.ftp.path}**/*`, '.', {base: config.ftp.path, buffer: false}));
+            .pipe(ftp.clean(config.ftp.globs, '.', {base: config.ftp.path, buffer: false}));
     }
 }
+// function ftpRefresh() {
+//     if (config.useFTP) {
+//         return src(config.ftp.globs, config.options.src)
+//             .pipe(ftp.newer(config.ftp.path))
+//             .pipe(ftp.dest(config.ftp.path))
+//             .pipe(ftp.clean(`${config.ftp.path}**/*`, '.', {base: config.ftp.path, buffer: false}));
+//     }
+// }
 
 
 
@@ -335,18 +338,31 @@ function slash(filePath) {
     return filePath.replace(/\\/g, '/');
 }
 
-function logFile(message, filePath) {
-    console.log(c.cyanBright('#'.repeat(80)));
-    log(c.greenBright(message), c.magentaBright(filePath));
-    console.log(c.cyanBright('#'.repeat(80)));
-}
-
 function getDest(filePath, src = '.', output = '.') {
     const rel = path.relative(src, path.dirname(filePath));
     const destPath = path.posix.join(output, rel);
     const ftpDest = path.posix.join(config.ftp.path, destPath);
     return {destPath: destPath, ftpDest: ftpDest};
 }
+
+function logFile(message, filePath) {
+    console.log(c.cyanBright('#'.repeat(80)));
+    log(c.greenBright(message), c.magentaBright(filePath));
+    console.log(c.cyanBright('#'.repeat(80)));
+}
+
+function log() {
+    const time = getTime();
+    process.stdout.write(time + ' ');
+    console.log.apply(console, arguments);
+    return this;
+}
+
+function getTime() {
+    const time = new Date().toTimeString().slice(0, 8);
+    return `[${c.gray(time)}]`;
+}
+
 
 
 exports.default    = watcher;

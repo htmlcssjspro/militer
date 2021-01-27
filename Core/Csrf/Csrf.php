@@ -12,7 +12,7 @@ class Csrf implements iCsrf
 
     private function init()
     {
-        $_SESSION['csrf_secret'] = $_SESSION['user_uuid'] ?? \STATUS_GUEST;
+        $_SESSION['csrf_secret'] = $_SESSION['user_uuid'] ?? 'guest';
         $_SESSION['csrf_token']  = \password_hash($_SESSION['csrf_secret'], PASSWORD_DEFAULT);
     }
 

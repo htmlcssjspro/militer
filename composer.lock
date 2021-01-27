@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "028ba07d7deca08f6a1286e9dbb4742f",
+    "content-hash": "900360af6f9bc6936d6a5d92909a7f09",
     "packages": [
         {
             "name": "brick/math",
@@ -61,54 +61,6 @@
                 }
             ],
             "time": "2020-08-18T23:57:15+00:00"
-        },
-        {
-            "name": "militer/mvc-core",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/htmlcssjspro/mvc-core.git",
-                "reference": "a985a9e1edd9919112c7f0229439f2a7afae226f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/htmlcssjspro/mvc-core/zipball/a985a9e1edd9919112c7f0229439f2a7afae226f",
-                "reference": "a985a9e1edd9919112c7f0229439f2a7afae226f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Militer\\mvcCore\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Sergei MILITER Tarasov",
-                    "email": "militer@htmlcssjs.pro",
-                    "homepage": "https://htmlcssjs.pro",
-                    "role": "Developer"
-                }
-            ],
-            "description": "micro-mvc-framework для проекта composer militer/militer Движок веб-сайта с микро-mvc-фреймворком и микро-cms",
-            "homepage": "https://github.com/htmlcssjspro/mvc-core",
-            "keywords": [
-                "militer",
-                "mvc",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/htmlcssjspro/mvc-core/issues",
-                "source": "https://github.com/htmlcssjspro/mvc-core/tree/v1.0.0"
-            },
-            "time": "2020-09-25T12:53:21+00:00"
         },
         {
             "name": "ramsey/collection",

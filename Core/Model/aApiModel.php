@@ -15,7 +15,7 @@ abstract class aApiModel extends aModel
     protected function checkEmail($email)
     {
         $sql = "SELECT 1 FROM {$this->usersTable} WHERE `email`=?";
-        $pdostmt = $this->pdo->prepare($sql);
+        $pdostmt = $this->PDO->prepare($sql);
         return $pdostmt->execute([$email]);
     }
 

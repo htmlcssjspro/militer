@@ -1,21 +1,22 @@
 <?php
 
 use App\User\User;
-use Militer\mvcCore\Csrf\Csrf;
-use Militer\mvcCore\Csrf\iCsrf;
-use Militer\mvcCore\DB\DB;
-use Militer\mvcCore\DB\iDB;
-use Militer\mvcCore\DI\Container;
-use Militer\mvcCore\DI\iContainer;
-use Militer\mvcCore\Http\Request\iRequest;
-use Militer\mvcCore\Http\Request\Request;
-use Militer\mvcCore\Http\Response\iResponse;
-use Militer\mvcCore\Http\Response\Response;
-use Militer\mvcCore\Router\iRouter;
-use Militer\mvcCore\Router\Router;
-use Militer\mvcCore\User\iUser;
-use Militer\mvcCore\View\iView;
-use Militer\mvcCore\View\View;
+use Core\Csrf\Csrf;
+use Core\Csrf\iCsrf;
+use Core\DB\DB;
+use Core\DB\iDB;
+use Core\DI\Container;
+use Core\DI\iContainer;
+use Core\Http\Request\iRequest;
+use Core\Http\Request\Request;
+use Core\Http\Response\iResponse;
+use Core\Http\Response\Response;
+use Core\Router\iRouter;
+use Core\Router\Router;
+use Core\User\iUser;
+use Core\View\iView;
+use Core\View\View;
+
 
 $aliases = [
     iUser::class => User::class,
@@ -28,7 +29,6 @@ $aliases = [
     iResponse::class   => Response::class,
     iView::class       => View::class,
 ];
-
 
 
 $definitions = [

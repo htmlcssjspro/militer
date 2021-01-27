@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\AdminModel;
-use Militer\mvcCore\Controller\aPageController;
-use Militer\mvcCore\DI\Container;
-use Militer\mvcCore\Http\Response\iResponse;
+use Core\Controller\aPageController;
+use Core\DI\Container;
+use Core\Http\Response\iResponse;
 
 class AdminController extends aPageController
 {
@@ -16,13 +16,15 @@ class AdminController extends aPageController
         parent::__construct();
         $this->Model = $Model;
 
-        $this->Model->layout = \ADMIN_LAYOUT;
-        $this->Model->header = \ADMIN_HEADER;
-        $this->Model->footer = \ADMIN_FOOTER;
-        $this->Model->aside  = \ADMIN_ASIDE;
+        $adminConfig = $this->config['admin'];
 
-        $this->Model->mainCSS = \ADMIN_CSS;
-        $this->Model->mainJS  = \ADMIN_JS;
+        $this->Model->layout = $adminConfig['layout'];
+        $this->Model->header = $adminConfig['header'];
+        $this->Model->footer = $adminConfig['footer'];
+        $this->Model->aside  = $adminConfig['aside'];
+
+        $this->Model->mainCSS = $adminConfig['css'];
+        $this->Model->mainJS  = $adminConfig['js'];
 
         $this->Model->headers[] = '';
 
@@ -30,10 +32,10 @@ class AdminController extends aPageController
     }
 
 
-    public function login()
+    public function loginPage()
     {
-        $this->Model->layout = \ADMIN_LOGIN;
-        $this->pageTextId = \ADMIN_LOGIN_ID;
+        $this->pageId = 'admin_login_page';
+        $this->Model->layout = $this->config['admin']['login'];
         // $this->model->pageCSS[] = '/public/css/militerslider.css';
         // $this->model->pageJS[]  = '/public/js/militerslider.js';
         $this->render();
@@ -42,18 +44,18 @@ class AdminController extends aPageController
     public function index()
     {
         $this->adminCheck();
-        $this->Model->mainContent = \ADMIN_HOME;
+        $this->pageId = 'admin_home_page';
+        $this->Model->mainContent = $this->config['admin']['pages']['home'];
         // $this->model->pageCSS[] = '/public/css/militerslider.css';
         // $this->model->pageJS[]  = '/public/js/militerslider.js';
-        $this->pageTextId = \ADMIN_HOME_ID;
         $this->render();
     }
 
     public function pages()
     {
         $this->adminCheck();
-        $this->Model->mainContent = \ADMIN_PAGES;
-        $this->pageTextId = \ADMIN_PAGES_ID;
+        $this->Model->mainContent = $this->config['admin']['pages']['pages'];
+        $this->pageId = 'admin_pages';
         $this->Model->getPagesData();
         $this->render();
     }
@@ -71,8 +73,8 @@ class AdminController extends aPageController
     public function preferences()
     {
         $this->adminCheck();
-        $this->Model->mainContent = \ADMIN_PREFERENCES;
-        $this->pageTextId = \ADMIN_PREFERENCES_ID;
+        $this->pageId = 'admin_preferences';
+        $this->Model->mainContent = $this->config['admin']['pages']['preferences'];
         $this->Model->getLoginUrl();
         $this->render();
     }
@@ -85,4 +87,7 @@ class AdminController extends aPageController
             $Response->notFound();
         }
     }
+
+
+
 }

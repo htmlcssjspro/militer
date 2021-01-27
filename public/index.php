@@ -1,7 +1,7 @@
 <?php
 
-use Militer\mvcCore\App;
-use Militer\mvcCore\Exception\UserException;
+use Core\App;
+use Core\Exception\UserException;
 
 define('MILITER_START', microtime(true));
 
@@ -16,7 +16,5 @@ require _ROOT_ . '/vendor/autoload.php';
 UserException::init();
 
 require _ROOT_ . '/config/container.php';
-
-// prd($_SERVER);
 
 App::start();

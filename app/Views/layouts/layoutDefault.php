@@ -43,7 +43,7 @@
 
 
     <?php if ($Model->guest) {
-        require SECTION_ACCESS;
+        require $Model->access;
     } ?>
 
     <section class="response dn">

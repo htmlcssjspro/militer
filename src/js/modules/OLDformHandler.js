@@ -54,18 +54,14 @@ export default function formHandler(formSection, cb = r => r) {
                 fetchInit.body = new FormData($form);
                 newFetch(url, fetchInit, response => {
                     if (response.success) {
-                        $responseP.innerHTML = response.success.message;
                         const $popup = $form.closest('.popup');
                         if($popup){
                             $popup.classList.add('dn');
                             inputsRemoveEventListener();
                             $form.removeEventListener('submit', handler, false);
                         }
-                    } else if (response.error) {
-                        $responseP.innerHTML = response.error.message;
-                    } else {
-                        $responseP.textContent = 'Неожиданный ответ сервера';
                     }
+                    $responseP.innerHTML = response.message ? response.message : 'Неожиданный ответ сервера';
                     popupHandler($response);
                     cb(response);
                     response.mainReload && mainReload();

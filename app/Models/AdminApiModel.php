@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Militer\mvcCore\Model\aApiModel;
+use Core\Model\aApiModel;
 
 class AdminApiModel extends aApiModel
 {
@@ -12,33 +12,31 @@ class AdminApiModel extends aApiModel
     }
 
 
-    public function login($loginData)
+    public function login($login)
     {
-        $sql = "SELECT `password` FROM {$this->adminTable} WHERE `login`=?";
-        $pdostmt = $this->pdo->prepare($sql);
-        $pdostmt->execute([$loginData['login']]);
-        $data = $pdostmt->fetch();
-        $hash = $data['password'];
-        return \password_verify($loginData['password'], $hash);
+        $sql = "SELECT `password` FROM `{$this->adminTable}` WHERE `login`=?";
+        $pdostmt = $this->PDO->prepare($sql);
+        $pdostmt->execute([$login]);
+        return $pdostmt->fetch();
     }
 
-    public function updateAdminData($adminData)
+    public function updateLoginUrl($loginUrl)
     {
-        $sql = "UPDATE {$this->sitemapTable} SET `page_url`=?, WHERE `text_id`='admin_login'";
-        $pdostmt = $this->pdo->prepare($sql);
-        $result = $pdostmt->execute([$adminData['loginUrl']]);
-        if(!$result) {
-            throw new \Exception("Ошибка обновления страницы ввода пароля");
-        }
-
-        $sql = "UPDATE {$this->adminTable} SET `login`=?, `password`=? WHERE `id`=1";
-        $pdostmt = $this->pdo->prepare($sql);
-        $result = $pdostmt->execute([$adminData['login'], $adminData['passwordHash']]);
-        if(!$result) {
-            throw new \Exception("Ошибка обновления данных администратора");
-        }
-        return true;
+        $sql = "UPDATE {$this->sitemapTable} SET `page_url`=? WHERE `page_id`='admin_login_page'";
+        $pdostmt = $this->PDO->prepare($sql);
+        return $pdostmt->execute([$loginUrl]);
     }
-
+    public function updateLogin($login)
+    {
+        $sql = "UPDATE {$this->adminTable} SET `login`=? WHERE `login`=?";
+        $pdostmt = $this->PDO->prepare($sql);
+        return  $pdostmt->execute([$login, $_SESSION['admin']]);
+    }
+    public function updatePassword($password)
+    {
+        $sql = "UPDATE {$this->adminTable} SET `password`=? WHERE `login`=?";
+        $pdostmt = $this->PDO->prepare($sql);
+        return $pdostmt->execute([$password, $_SESSION['admin']]);
+    }
 
 }

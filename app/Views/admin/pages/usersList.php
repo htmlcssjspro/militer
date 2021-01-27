@@ -16,11 +16,11 @@
         <tbody>
             <tr>
                 <?php foreach ($order as $name) : ?>
-                    <th><?= $model->userDict[$name] ?></th>
+                    <th><?= $Model->userDict[$name] ?></th>
                 <?php endforeach; ?>
-                <th><?= $model->userDict['status'] ?></th>
+                <th><?= $Model->userDict['status'] ?></th>
             </tr>
-            <?php foreach ($model->usersList as $userData) : ?>
+            <?php foreach ($Model->usersList as $userData) : ?>
                 <tr>
                     <?php foreach ($order as $name) : ?>
                         <td><?= $userData[$name] ?></td>
@@ -30,7 +30,7 @@
                             <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token'] ?>">
                             <input type="hidden" name="user-uuid" value="<?= $userData['user_uuid'] ?>">
                             <select name="status">
-                                <?php foreach ($model->userDict['statusDict'] as $status => $interpretation) : ?>
+                                <?php foreach ($Model->userDict['statusDict'] as $status => $interpretation) : ?>
                                     <option value="<?= $status ?>" <?= $userData['status'] === $status ? 'selected' : '' ?>><?= $interpretation ?></option>
                                 <?php endforeach; ?>
                             </select>

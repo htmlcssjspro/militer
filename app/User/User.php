@@ -2,12 +2,13 @@
 
 namespace App\User;
 
-use Militer\mvcCore\User\aUser;
+use Core\DI\Container;
+use Core\User\aUser;
 
 class User extends aUser
 {
-    protected $usersTable = \USERS_TABLE;
-    protected $organizatorsTable = \ORGANIZATORS_TABLE;
+    protected $usersTable;
+    protected $config;
 
     public string $userUuid;
 
@@ -15,20 +16,23 @@ class User extends aUser
     public function __construct()
     {
         parent::__construct();
+        $this->config = Container::get('config');
+        $dbTables = $this->config['dbTables'];
+        $this->usersTable = $dbTables['users'];
         $this->init();
     }
 
 
     private function init()
     {
-        $this->userUuid = $_SESSION['user_uuid'] ?? \STATUS_GUEST;
+        $this->userUuid = $_SESSION['user_uuid'] ?? 'guest';
     }
 
 
     public function login($login, $password)
     {
-        $sql = "SELECT `user_uuid`, `password` FROM {$this->usersTable} WHERE `email`=? LIMIT 1";
-        $pdostmt = $this->pdo->prepare($sql);
+        $sql = "SELECT `user_uuid`, `password` FROM `{$this->usersTable}` WHERE `email`=? LIMIT 1";
+        $pdostmt = $this->PDO->prepare($sql);
         $pdostmt->execute([$login]);
         $userData = $pdostmt->fetch();
         $passwordHash = $userData['password'];
@@ -36,13 +40,15 @@ class User extends aUser
     }
 
 
+
+
     public function getUserData()
     {
         $sql = "UPDATE {$this->usersTable} SET `last_visit`=CURRENT_DATE() WHERE `user_uuid`='{$this->userUuid}'";
-        $this->pdo->query($sql);
+        $this->PDO->query($sql);
 
         $sql = "SELECT `user_uuid`, `username`, `status`, `balance` FROM {$this->usersTable} WHERE `user_uuid`='{$this->userUuid}'";
-        return $this->pdo->query($sql)->fetch();
+        return $this->PDO->query($sql)->fetch();
     }
 
 

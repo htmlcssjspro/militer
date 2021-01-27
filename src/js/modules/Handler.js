@@ -1,6 +1,6 @@
 'use strict';
 
-import {newFetch, fetchUrl, fetchForm, mainReload, reload} from '/src/js/modules/Fetch';
+import {newFetch, fetchUrl, fetchForm, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
 
 
 function inputCheck($input) {
@@ -76,25 +76,24 @@ function validation($form) {
     });
 }
 
+const formsHandler = event => {
+    event.preventDefault();
+    // const t = event.target;
+    const $form = event.target.closest('form');
+    validation($form) && fetchForm($form);
+};
 function formHandler() {
-
-    const handler = event => {
-        event.preventDefault();
-        // const t = event.target;
-        const $form = event.target.closest('form');
-        validation($form) && fetchForm($form);
-    };
-
     document.body.addEventListener('focusin', inputHandler, false);
     document.body.addEventListener('input',   inputHandler, false);
     document.body.addEventListener('change',  inputHandler, false);
 
-    document.body.addEventListener('submit', handler, false);
+    document.body.addEventListener('submit', formsHandler, false);
 }
 
 
-function btnHandler(data) {
+function clickHandler(data) {
     document.body.addEventListener('click', event => {
+        event.preventDefault();
         const t = event.target;
         if (t.tagName === 'BUTTON' && t.type === 'button') {
             const popup = t.dataset.popup;
@@ -104,8 +103,14 @@ function btnHandler(data) {
             const cb = t.dataset.cb;
             cb && data && setTimeout(() => data[cb](t), 100);
         }
+        if (t.tagName === 'A') {
+            const href = t.getAttribute('href');
+            console.log('href: ', href);
+            href && mainLoad(href);
+        }
     });
 }
+
 
 function popupHandler(popup) {
     const $popup = typeof popup === 'string' ? document.querySelector(popup) : popup;
@@ -145,4 +150,4 @@ function dropdownHandler() {
 
 
 
-export {formHandler, btnHandler, popupHandler, dropdownHandler};
+export {formHandler, clickHandler, popupHandler, dropdownHandler};

@@ -53,7 +53,6 @@ abstract class aApiController extends aController
         $array = \is_array($dest);
         $files = $this->Request->getFILES();
         $file = $files[$name];
-        // \prd($file, '$file');
         if (\is_array($file['name']) && $array) {
             $files = $this->reArrayFILES($file);
         } else {

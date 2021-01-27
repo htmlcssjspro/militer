@@ -26,13 +26,12 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "militer/mvc-core": "^1.0.0",
         "ramsey/uuid": "^4.1.0"
     },
     "require-dev": {},
     "scripts": {
         "post-install": [
-            "php -r \"rename('ftpConfig.php.example', 'ftpConfig.php');\"",
+            "php -r \"rename('ftpConfig.js.example', 'ftpConfig.js');\"",
             "php -r \"rename('config/config.php.example', 'config/config.php');\"",
             "php -r \"rename('config/database.php.example', 'config/database.php');\"",
             "php -r \"rename('log/errors.log.example', 'log/errors.log');\""

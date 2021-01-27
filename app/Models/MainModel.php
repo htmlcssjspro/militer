@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Militer\mvcCore\Model\aPageModel;
+use Core\Model\aPageModel;
 
 class MainModel extends aPageModel
 {

@@ -30,12 +30,13 @@ abstract class aPageModel extends aModel
     }
 
 
-    public function getPageData($textId)
+    public function getPageData($pageId)
     {
-        $sql = "SELECT `title`, `description` FROM {$this->sitemapTable} WHERE `text_id`='$textId' LIMIT 1";
+        $sql = "SELECT `title`, `description`, `h1` FROM {$this->sitemapTable} WHERE `page_id`='$pageId'";
         $pageData = $this->PDO->query($sql)->fetch();
         $this->title       = $pageData['title'];
         $this->description = $pageData['description'];
+        $this->h1          = $pageData['h1'];
     }
 
 

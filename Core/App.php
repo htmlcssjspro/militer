@@ -2,8 +2,8 @@
 
 namespace Core;
 
-use Militer\mvcCore\DI\Container;
-use Militer\mvcCore\Router\iRouter;
+use Core\DI\Container;
+use Core\Router\iRouter;
 
 class App
 {
