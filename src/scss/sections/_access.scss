@@ -1,7 +1,7 @@
 .popup {
-    @extend %popup;
+    // @extend %popup;
     &__wrapper {
-        @extend %popup__wrapper;
+        // @extend %popup__wrapper;
         .login & {
             width: 400px;
         }
@@ -11,7 +11,6 @@
     }
 }
 .login {
-    // width: 400px;
 }
 
 .register {
@@ -30,5 +29,4 @@
 }
 
 .access-restore {
-    // width: 400px;
 }

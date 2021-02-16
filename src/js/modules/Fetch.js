@@ -2,8 +2,10 @@
 
 import {popupHandler} from '/src/js/modules/Handler';
 
-function newFetch(url, init = {}, cb = () => {}) {
-    init.method = init.method ? init.method : 'POST';
+function newFetch(url, cb = () => {}) {
+    // init.method = init.method ? init.method : 'POST';
+    const init = {};
+    init.method = 'POST';
     fetch(url, init)
         .then(response => {
             const ContentTypeHeader = response.headers.get('Content-Type');
@@ -48,8 +50,12 @@ function newFetch(url, init = {}, cb = () => {}) {
             //     $responseP.innerHTML && popupHandler($response);
             // }
 
-            response.mainReload && mainReload();
-            response.reload && reload();
+            if(response.content)  {
+                document.getElementById('main').innerHTML = response.content;
+                document.querySelector('title').textContent = response.title;
+                document.querySelector('meta[name=description]').content = response.description;
+            }
+            response.reload && window.location.reload();
         })
         .catch(error => console.error(error));
 }
@@ -80,29 +86,5 @@ function fetchForm($form) {
     });
 }
 
-function fetchUrl(url, cb) {
-    newFetch(url, undefined, cb);
-}
 
-function mainLoad(url) {
-    fetchMainLoad(url, data => {
-        document.querySelector('title').textContent = data.title;
-        document.querySelector('meta[name=description]').content = data.description;
-    });
-}
-function mainReload() {
-    fetchMainLoad(window.location.href);
-}
-
-function fetchMainLoad(url, cb = () => {}) {
-    newFetch(url, undefined, data => {
-        document.getElementById('main').innerHTML = data.content;
-        cb(data);
-    });
-}
-
-function reload() {
-    window.location.reload();
-}
-
-export {newFetch, fetchUrl, fetchForm, mainLoad, mainReload, reload};
+export {newFetch, fetchForm};

@@ -1,8 +1,9 @@
 'use strict';
 
-import {newFetch, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
+import {newFetch, fetchForm} from '/src/js/modules/Fetch';
 import {formHandler, clickHandler, dropdownHandler, popupHandler} from '/src/js/modules/Handler';
 
+window.addEventListener('popstate', () => newFetch(history.state));
 
 clickHandler({
     del(t) {

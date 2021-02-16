@@ -14,6 +14,8 @@ abstract class aPageModel extends aModel
     public string $mainContent;
 
     public array $includes = [];
+    public array $layoutPopups = [];
+    public array $popups = [];
 
     public string $mainCSS;
     public string $mainJS;

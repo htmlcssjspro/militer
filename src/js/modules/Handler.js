@@ -1,6 +1,6 @@
 'use strict';
 
-import {newFetch, fetchUrl, fetchForm, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
+import {newFetch, fetchForm} from '/src/js/modules/Fetch';
 
 
 function inputCheck($input) {
@@ -90,28 +90,6 @@ function formHandler() {
     document.body.addEventListener('submit', formsHandler, false);
 }
 
-
-function clickHandler(data) {
-    document.body.addEventListener('click', event => {
-        event.preventDefault();
-        const t = event.target;
-        if (t.tagName === 'BUTTON' && t.type === 'button') {
-            const popup = t.dataset.popup;
-            popup && popupHandler(popup);
-            const href = t.dataset.href;
-            href && fetchUrl(href);
-            const cb = t.dataset.cb;
-            cb && data && setTimeout(() => data[cb](t), 100);
-        }
-        if (t.tagName === 'A') {
-            const href = t.getAttribute('href');
-            console.log('href: ', href);
-            href && mainLoad(href);
-        }
-    });
-}
-
-
 function popupHandler(popup) {
     const $popup = typeof popup === 'string' ? document.querySelector(popup) : popup;
     // const $popup = document.querySelector(popupSelector);
@@ -145,6 +123,27 @@ function dropdownHandler() {
         $toggle && $toggle.addEventListener('click', () => {
             $content && $content.classList.toggle('dn');
         });
+    });
+}
+
+
+function clickHandler(data) {
+    document.body.addEventListener('click', event => {
+        event.preventDefault();
+        const t = event.target;
+        if (t.tagName === 'BUTTON' && t.type === 'button') {
+            const popup = t.dataset.popup;
+            popup && popupHandler(popup);
+            const href = t.dataset.href;
+            href && newFetch(href);
+            const cb = t.dataset.cb;
+            cb && data && setTimeout(() => data[cb](t), 100);
+        }
+        if (t.tagName === 'A') {
+            history.pushState(t.href, '', t.href);
+            const href = t.getAttribute('href');
+            href && newFetch(href);
+        }
     });
 }
 

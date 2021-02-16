@@ -7,11 +7,12 @@
 @import '../common/_common';
 
 @import 'components/body';
-@import 'components/content';
 
 @import 'components/header';
-@import 'components/footer';
+@import 'components/content';
 @import 'components/main';
 @import 'components/aside';
+@import 'components/footer';
 
+@import 'sections/newpage';
 @import '../sections/response';

@@ -1,12 +1,13 @@
 'use strict';
 
+import {newFetch, fetchForm} from '/src/js/modules/Fetch';
 import {formHandler, clickHandler, dropdownHandler} from '/src/js/modules/Handler';
-import {newFetch, fetchUrl, mainLoad, mainReload, reload} from '/src/js/modules/Fetch';
 
 
 clickHandler();
 formHandler();
 dropdownHandler();
+window.addEventListener('popstate', () => newFetch(history.state));
 
 // 'btn_enter';
 // 'btn_signin';

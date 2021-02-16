@@ -39,11 +39,12 @@
         <?php require $Model->footer; ?>
     </footer>
 
-    <section class="response dn">
-        <div class="response__wrapper">
-            <P></P>
-        </div>
-    </section>
+
+    <?php if ($Model->layoutPopups) {
+        foreach ($Model->layoutPopups as $layoutPopup) {
+            require $layoutPopup;
+        }
+    } ?>
 
     <?php if ($Model->pageCSS) : ?>
         <?php foreach ($Model->pageCSS as $pageCSS) : ?>

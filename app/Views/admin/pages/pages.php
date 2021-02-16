@@ -1,7 +1,9 @@
 <h1><?= $Model->h1 ?></h1>
 <section class="admin__pages">
+    <button class="btn_newpage" type="button" data-popup=".newpage">Добавить новую страницу</button>
     <?php foreach ($Model->pagesData as $pageData) : ?>
         <form action="/admin/api/updatesitemap" method="POST">
+            <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token'] ?>">
             <fieldset>
                 <legend><?= $pageData['label'] ?></legend>
                 <label>
@@ -28,4 +30,11 @@
             </fieldset>
         </form>
     <?php endforeach; ?>
+    <button class="btn_newpage" type="button" data-popup=".newpage">Добавить новую страницу</button>
 </section>
+
+<?php if ($Model->popups) {
+    foreach ($Model->popups as $popup) {
+        require $popup;
+    }
+} ?>
