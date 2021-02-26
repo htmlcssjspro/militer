@@ -8,7 +8,6 @@ abstract class aModel implements iModel
 {
     protected $PDO;
     protected $config;
-
     protected $sitemapTable;
     protected $usersTable;
     protected $adminTable;

@@ -7,8 +7,6 @@ use Core\Controller\aPageController;
 
 class MainController extends aPageController
 {
-    public $Model;
-
 
     public function __construct(MainModel $Model)
     {

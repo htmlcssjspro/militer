@@ -7,8 +7,6 @@ use Core\Controller\aApiController;
 
 class AdminApiController extends aApiController
 {
-    public $Model;
-
 
     public function __construct(AdminApiModel $Model)
     {

@@ -10,12 +10,10 @@ use Core\View\iView;
 
 abstract class aController implements iController
 {
+    public $Model;
+
     protected $User;
     protected $Csrf;
-    protected $Model;
-
-    private $View;
-
     protected $config;
 
 
@@ -23,14 +21,8 @@ abstract class aController implements iController
     {
         $this->User = Container::get(iUser::class);
         $this->Csrf = Container::get(iCsrf::class);
-        $this->View = Container::get(iView::class);
         $this->config = Container::get('config');
     }
 
 
-    public function render()
-    {
-        $this->Model->getPageData($this->pageId);
-        $this->View->render($this->Model);
-    }
 }

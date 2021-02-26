@@ -9,7 +9,6 @@ use Core\Http\Response\iResponse;
 
 class AdminController extends aPageController
 {
-    public $Model;
     private $adminConfig;
 
     public function __construct(AdminModel $Model)

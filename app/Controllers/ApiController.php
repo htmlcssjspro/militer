@@ -9,7 +9,6 @@ use Ramsey\Uuid\Uuid;
 
 class ApiController extends aApiController
 {
-    public $Model;
 
     public function __construct(ApiModel $Model) {
         parent::__construct();
