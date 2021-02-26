@@ -41,7 +41,7 @@
             "npm i"
         ],
         "post-install-cmd": [
-            "@post-install"
+
         ]
     },
     "scripts-descriptions": {
