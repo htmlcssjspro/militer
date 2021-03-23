@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Мар 12 2021 г., 10:22
+-- Время создания: Мар 23 2021 г., 11:07
 -- Версия сервера: 5.7.27-30
 -- Версия PHP: 7.1.30
 
@@ -116,12 +116,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_uuid`, `username`, `name`, `email`, `password`, `status`, `balance`, `phone`, `about`, `last_visit`, `register_date`) VALUES
-(10, '4fc4042f-4dfc-4f5c-bfb8-5bbf215d0bfa', 'aaaaa2', 'aaaa', 'htmlcssjs.pro@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-26', '2020-09-24'),
-(13, 'bbb_id', 'bbbbb', 'bbb', 'bbb@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-08', '2020-11-08'),
-(14, 'ccc_id', 'ccc', 'ccc', 'ccc@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-08', '2020-11-08'),
-(15, 'ddd_id', 'ddd', 'ddd', 'ddd@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-08', '2020-11-08'),
-(16, 'eee_id', 'eee', 'eee', 'eee@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-08', '2020-11-08'),
-(17, 'fff_id', 'fff', 'fff', 'fff@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'organiza', '0.00', '+79149705050', '', '2020-11-08', '2020-11-08');
+(1, '4fc4042f-4dfc-4f5c-bfb8-5bbf215d0bfa', 'aaaaa2', 'aaaa', 'htmlcssjs.pro@gmail.com', '$2y$10$RwkGiI7vxMyTjfCFX6qpFe4czS63MFDZ6BQcyowHqcwqF7Nz5Zpxa', 'user', '0.00', '+79149705050', '', '2020-11-26', '2020-09-24');
 
 --
 -- Индексы сохранённых таблиц
