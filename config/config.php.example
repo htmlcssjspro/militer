@@ -23,10 +23,14 @@ return [
     ],
     'admin' => [
         'layout' => VIEWS . '/admin/layouts/AdminLayout.php',
-        'login'  => VIEWS . '/admin/layouts/login.php',
         'header' => VIEWS . '/admin/components/header.php',
         'footer' => VIEWS . '/admin/components/footer.php',
         'aside'  => VIEWS . '/admin/components/aside.php',
+        'login'  => VIEWS . '/admin/layouts/login.php',
+
+        'layoutPopups' => [
+            'response' => VIEWS . '/admin/popups/response.php',
+        ],
 
         'css' => '/public/css/admin/admin.css',
         'js'  => '/public/js/admin.js',
@@ -36,6 +40,10 @@ return [
             'pages'       => VIEWS . '/admin/pages/pages.php',
             'usersList'   => VIEWS . '/admin/pages/usersList.php',
             'preferences' => VIEWS . '/admin/pages/preferences.php',
+            'login'       => VIEWS . '/admin/layouts/login.php',
+        ],
+        'popups' => [
+            'newpage' => VIEWS . '/admin/popups/newpage.php',
         ],
     ],
     'includes' => [
